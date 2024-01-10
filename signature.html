@@ -1,0 +1,208 @@
+<html lang="en">
+	<head>
+
+		<meta charset="UTF-8">
+
+		<link rel="apple-touch-icon" type="image/png" href="https://cpwebassets.codepen.io/assets/favicon/apple-touch-icon-5ae1a0698dcc2402e9712f7d01ed509a57814f994c660df9f7a952f3060705ee.png">
+		<meta name="apple-mobile-web-app-title" content="CodePen">
+
+		<link rel="shortcut icon" type="image/x-icon" href="https://cpwebassets.codepen.io/assets/favicon/favicon-aec34940fbc1a6e787974dcd360f2c6b63348d4b1f4e06c77743096d55480f33.ico">
+
+		<link rel="mask-icon" type="image/x-icon" href="https://cpwebassets.codepen.io/assets/favicon/logo-pin-8f3771b1072e3c38bd662872f6b673a722f4b3ca2421637d5596661b4e2132cc.svg" color="#111">
+
+
+		<title>CodePen - E Signature using Canvas</title>
+
+
+		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+		<style>
+			#sig-canvas {
+				border: 2px dotted #CCCCCC;
+				border-radius: 15px;
+				cursor: crosshair;
+			}
+		</style>
+	</head>
+
+	<body translate="no">
+		<!-- Content -->
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<h1>E-Signature</h1>
+					<p>Sign in the canvas below and save your signature as an image!</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<canvas id="sig-canvas" width="620" height="160">
+						Get a better browser, bro.
+					</canvas>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<button class="btn btn-primary" id="sig-submitBtn">Submit Signature</button>
+					<button class="btn btn-default" id="sig-clearBtn">Clear Signature</button>
+				</div>
+			</div>
+			<br>
+			<div class="row">
+				<div class="col-md-12">
+					<textarea id="sig-dataUrl" class="form-control" rows="5">Data URL for your signature will go here!</textarea>
+				</div>
+			</div>
+			<br>
+			<div class="row">
+				<div class="col-md-12">
+					<img id="sig-image" src="" alt="Your signature will go here!">
+				</div>
+			</div>
+		</div>
+		<img 
+			id="sig-image" 
+			src="data:image/png;base64,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" 
+		alt="Your signature will go here!">
+		<script src="https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-2c7831bb44f98c1391d6a4ffda0e1fd302503391ca806e7fcc7b9b87197aec26.js"></script>
+		
+		<script id="rendered-js">
+			(function () {
+				window.requestAnimFrame = function (callback) {
+					return window.requestAnimationFrame ||
+					window.webkitRequestAnimationFrame ||
+					window.mozRequestAnimationFrame ||
+					window.oRequestAnimationFrame ||
+					window.msRequestAnimaitonFrame ||
+					function (callback) {
+						window.setTimeout(callback, 1000 / 60);
+					};
+				}();
+
+				var canvas = document.getElementById("sig-canvas");
+				var ctx = canvas.getContext("2d");
+				ctx.strokeStyle = "#222222";
+				ctx.lineWidth = 4;
+
+				var drawing = false;
+				var mousePos = {
+					x: 0,
+					y: 0 
+				};
+
+				var lastPos = mousePos;
+
+				canvas.addEventListener("mousedown", function (e) {
+					drawing = true;
+					lastPos = getMousePos(canvas, e);
+				}, false);
+
+				canvas.addEventListener("mouseup", function (e) {
+					drawing = false;
+				}, false);
+
+				canvas.addEventListener("mousemove", function (e) {
+					mousePos = getMousePos(canvas, e);
+				}, false);
+
+				// Add touch event support for mobile
+				canvas.addEventListener("touchstart", function (e) {}, false);
+
+				canvas.addEventListener("touchmove", function (e) {
+					var touch = e.touches[0];
+					var me = new MouseEvent("mousemove", {
+						clientX: touch.clientX,
+						clientY: touch.clientY 
+					});
+
+						canvas.dispatchEvent(me);
+				}, false);
+
+				canvas.addEventListener("touchstart", function (e) {
+					mousePos = getTouchPos(canvas, e);
+					var touch = e.touches[0];
+					var me = new MouseEvent("mousedown", {
+						clientX: touch.clientX,
+						clientY: touch.clientY 
+					});
+
+					canvas.dispatchEvent(me);
+				}, false);
+
+				canvas.addEventListener("touchend", function (e) {
+					var me = new MouseEvent("mouseup", {});
+					canvas.dispatchEvent(me);
+				}, false);
+
+				function getMousePos(canvasDom, mouseEvent) {
+					var rect = canvasDom.getBoundingClientRect();
+					return {
+						x: mouseEvent.clientX - rect.left,
+						y: mouseEvent.clientY - rect.top 
+					};
+				}
+
+				function getTouchPos(canvasDom, touchEvent) {
+					var rect = canvasDom.getBoundingClientRect();
+					return {
+						x: touchEvent.touches[0].clientX - rect.left,
+						y: touchEvent.touches[0].clientY - rect.top 
+					};
+				}
+
+				function renderCanvas() {
+					if (drawing) {
+						ctx.moveTo(lastPos.x, lastPos.y);
+						ctx.lineTo(mousePos.x, mousePos.y);
+						ctx.stroke();
+						lastPos = mousePos;
+					}
+				}
+
+				// Prevent scrolling when touching the canvas
+				document.body.addEventListener("touchstart", function (e) {
+					if (e.target == canvas) {
+						e.preventDefault();
+					}
+				}, false);
+				document.body.addEventListener("touchend", function (e) {
+					if (e.target == canvas) {
+						e.preventDefault();
+					}
+				}, false);
+				document.body.addEventListener("touchmove", function (e) {
+					if (e.target == canvas) {
+						e.preventDefault();
+					}
+				}, false);
+
+				(function drawLoop() {
+					requestAnimFrame(drawLoop);
+					renderCanvas();
+				})();
+
+				function clearCanvas() {
+					canvas.width = canvas.width;
+				}
+
+				// Set up the UI
+				var sigText = document.getElementById("sig-dataUrl");
+				var sigImage = document.getElementById("sig-image");
+				var clearBtn = document.getElementById("sig-clearBtn");
+				var submitBtn = document.getElementById("sig-submitBtn");
+				clearBtn.addEventListener("click", function (e) {
+					clearCanvas();
+					sigText.innerHTML = "Data URL for your signature will go here!";
+					sigImage.setAttribute("src", "");
+				}, false);
+				submitBtn.addEventListener("click", function (e) {
+					var dataUrl = canvas.toDataURL();
+					sigText.innerHTML = dataUrl;
+					sigImage.setAttribute("src", dataUrl);
+				}, false);
+
+			})();
+			//# sourceURL=pen.js
+		</script>
+	</body>
+</html>
